@@ -6,6 +6,6 @@ class Solution {
             return sqrtOfSum;
         } else {
             return -1;
-            }
-            }
-            }
+       }
+    }
+ }
