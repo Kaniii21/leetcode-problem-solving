@@ -10,10 +10,10 @@
  */
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-    return addTwoNumbersHelper(l1, l2, 0);
+    return addTwoNumbers(l1, l2, 0);
     }
 
-    private ListNode addTwoNumbersHelper(ListNode l1, ListNode l2, int carry) {
+    private ListNode addTwoNumbers(ListNode l1, ListNode l2, int carry) {
         if (l1 == null && l2 == null && carry == 0) {
             return null;
         }
@@ -29,7 +29,7 @@ class Solution {
         }
 
         ListNode result = new ListNode(value % 10);
-        result.next = addTwoNumbersHelper(l1, l2, value / 10);
+        result.next = addTwoNumbers(l1, l2, value / 10);
         return result;    
     }
 }
