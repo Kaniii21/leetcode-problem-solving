@@ -1,45 +1,48 @@
+class Trie {
+    private Trie[] children = new Trie[26];
+    private int wordIndex = -1;
+
+    public void insert(String word, int index) {
+        Trie node = this;
+        for (char c : word.toCharArray()) {
+            int charIndex = c - 'a';
+            if (node.children[charIndex] == null) {
+                node.children[charIndex] = new Trie();
+            }
+            node = node.children[charIndex];
+        }
+        node.wordIndex = index;
+    }
+
+    public int search(String word) {
+        Trie node = this;
+        for (char c : word.toCharArray()) {
+            int charIndex = c - 'a';
+            if (node.children[charIndex] == null) {
+                return -1;
+            }
+            node = node.children[charIndex];
+            if (node.wordIndex != -1) {
+                return node.wordIndex;
+            }
+        }
+        return -1;
+    }
+}
+
 class Solution {
-    class TrieNode {
-        TrieNode[] children;
-        String word;
-        
-        TrieNode() {
-            children = new TrieNode[26];
-            word = null;
-        }
-    }
     public String replaceWords(List<String> dictionary, String sentence) {
-     TrieNode root = buildTrie(dictionary);
-        StringBuilder sb = new StringBuilder();
+        Trie trie = new Trie();
+        for (int i = 0; i < dictionary.size(); i++) {
+            trie.insert(dictionary.get(i), i);
+        }
+
         String[] words = sentence.split("\\s+");
-        
+        List<String> modifiedSentence = new ArrayList<>();
         for (String word : words) {
-            TrieNode node = root;
-            for (char c : word.toCharArray()) {
-                if (node.children[c - 'a'] == null || node.word != null) {
-                    break;
-                }
-                node = node.children[c - 'a'];
-            }
-            sb.append(node.word != null ? node.word : word);
-            sb.append(" ");
+            int index = trie.search(word);
+            modifiedSentence.add(index == -1 ? word : dictionary.get(index));
         }
-        
-        return sb.toString().trim();
-    }
-    
-    private TrieNode buildTrie(List<String> dictionary) {
-        TrieNode root = new TrieNode();
-        for (String word : dictionary) {
-            TrieNode node = root;
-            for (char c : word.toCharArray()) {
-                if (node.children[c - 'a'] == null) {
-                    node.children[c - 'a'] = new TrieNode();
-                }
-                node = node.children[c - 'a'];
-            }
-            node.word = word;
-        }
-        return root;    
+        return String.join(" ", modifiedSentence);
     }
 }
