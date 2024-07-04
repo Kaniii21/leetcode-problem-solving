@@ -1,15 +1,17 @@
 class Solution {
-  public ListNode mergeNodes(ListNode head) {
-    if (head == null)
-      return null;
-    if (head.next.val == 0) {
-      ListNode node = new ListNode(head.val);
-      node.next = mergeNodes(head.next.next);
-      return node;
+    public ListNode mergeNodes(ListNode head) {
+        ListNode dummy = new ListNode();
+        int s = 0;
+        ListNode tail = dummy;
+        for (ListNode cur = head.next; cur != null; cur = cur.next) {
+            if (cur.val != 0) {
+                s += cur.val;
+            } else {
+                tail.next = new ListNode(s);
+                tail = tail.next;
+                s = 0;
+            }
+        }
+        return dummy.next;
     }
-
-    ListNode next = mergeNodes(head.next);
-    next.val += head.val;
-    return next;
-  }
 }
